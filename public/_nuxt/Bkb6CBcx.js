@@ -1,0 +1,1 @@
+import{D as o,e as c,o as n,f as e,h as r,as as _,T as d,aw as l}from"./C_3eNykI.js";const m={},h={class:"[--header-height:5rem] md:[--header-height:8rem]"};function f(a,i){const s=_,t=l;return n(),c("div",null,[e(s,{class:"absolute h-20 md:h-32 z-50 text-black"}),r("main",h,[d(a.$slots,"default")]),e(t)])}const u=o(m,[["render",f]]);export{u as default};

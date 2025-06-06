@@ -1,0 +1,1 @@
+import{r as s,R as c}from"./C_3eNykI.js";const v=(i,a)=>{const e=s(i.value);let u,r;return c(i,(t,m,o)=>{if(o(()=>{r&&(clearTimeout(r),r=void 0)}),t){u=Date.now(),e.value=t;return}if(!u){e.value=t;return}const n=Date.now()-u;if(n>=a){e.value=t;return}r=setTimeout(()=>{e.value=t},a-n)}),e};export{v as u};

@@ -1,0 +1,1 @@
+const t=new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}),n=new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0}),e=r=>r%1!==0?t.format(r):n.format(r);export{e as f};
