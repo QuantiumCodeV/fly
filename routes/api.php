@@ -28,3 +28,4 @@ Route::post('/requests/create', [RequestController::class, 'create']);
 Route::get('/flights/search', [FlightController::class, 'search']);
 Route::get('/redirects', [RequestController::class, 'redirects']);
 Route::get('/airports/pair', [AirportController::class, 'pair']);
+Route::get('/content/page/{page}', [RequestController::class, 'pageResults']);

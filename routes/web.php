@@ -20,3 +20,13 @@ Route::get('/', function () {
 Route::get('/results', function () {
     return view('results');
 });
+Route::get('/thank-you', function () {
+    return view('thank-you');
+});
+
+Route::get('/terms', function () {
+    return view('terms');
+});
+Route::get('/privacy-policy', function () {
+    return view('privacy-policy');
+});

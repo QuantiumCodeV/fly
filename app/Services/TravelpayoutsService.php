@@ -180,18 +180,24 @@ class TravelpayoutsService
             $geoData = json_decode($response->getBody(), true);
 
             // Ищем IATA код города
-            $cityData = $this->findCityByName($geoData['city']);
+            $cityData = $this->findCityByName($geoData['city'] ?? '');
 
+            // Если нашли город, возвращаем обогащенные данные
+            if ($cityData) {
+                return $cityData;
+            }
+
+            // Если не нашли город в базе, возвращаем данные из IP
             return [
-                'iata_code' => $cityData['code'] ?? null,
-                'city_code' => $cityData['code'] ?? null,
-                'name' => $geoData['city'],
-                'city' => $geoData['city'],
-                'country' => $geoData['country'],
+                'iata_code' => null,
+                'city_code' => null,
+                'name' => $geoData['city'] ?? 'Unknown',
+                'city' => $geoData['city'] ?? 'Unknown',
+                'country' => $geoData['country'] ?? 'Unknown',
                 'continent_name' => $this->getContinent($geoData['continentCode'] ?? 'EU'),
                 'coordinates' => [
-                    'lat' => $geoData['lat'],
-                    'lon' => $geoData['lon']
+                    'lat' => $geoData['lat'] ?? null,
+                    'lon' => $geoData['lon'] ?? null
                 ]
             ];
         } catch (\Exception $e) {
@@ -200,17 +206,30 @@ class TravelpayoutsService
         }
     }
 
-    /*
-
-    */
+    /**
+     * ПОЛУЧИТЬ ГОРОД ПО IATA КОДУ
+     */
     public function getCityByIata($iataCode)
     {
+        if (empty($iataCode)) {
+            return null;
+        }
+
         $cities = $this->getAllCities();
         foreach ($cities as $city) {
-            if ($city['code'] === $iataCode) {
-                return $city;
+            if (isset($city['code']) && $city['code'] === strtoupper($iataCode)) {
+                return $city['name'] ?? null;
             }
         }
+
+        // Если не нашли в городах, ищем в аэропортах
+        $airports = $this->getAllAirports();
+        foreach ($airports as $airport) {
+            if (isset($airport['city_code']) && $airport['city_code'] === strtoupper($iataCode)) {
+                return $airport['city'] ?? $airport['name'] ?? null;
+            }
+        }
+
         return null;
     }
 
@@ -288,11 +307,15 @@ class TravelpayoutsService
      */
     public function findCityByName($cityName)
     {
+        if (empty($cityName)) {
+            return null;
+        }
+
         $cities = $this->getAllCities();
 
         // Точное совпадение
         foreach ($cities as $city) {
-            if (strcasecmp($city['name'], $cityName) === 0) {
+            if (isset($city['name']) && strcasecmp($city['name'], $cityName) === 0) {
                 return $this->enrichCityData($city);
             }
         }
@@ -300,14 +323,14 @@ class TravelpayoutsService
         // Проверяем аэропорты
         $airports = $this->getAllAirports();
         foreach ($airports as $airport) {
-            if (strcasecmp($airport['city'], $cityName) === 0) {
+            if (isset($airport['city']) && strcasecmp($airport['city'], $cityName) === 0) {
                 return $this->enrichAirportData($airport);
             }
         }
 
         // Частичное совпадение
         foreach ($cities as $city) {
-            if (stripos($city['name'], $cityName) !== false) {
+            if (isset($city['name']) && stripos($city['name'], $cityName) !== false) {
                 return $this->enrichCityData($city);
             }
         }
@@ -320,16 +343,16 @@ class TravelpayoutsService
      */
     protected function enrichCityData($city)
     {
-        $countryName = $this->getCountryName($city['country_code']);
-        $continent = $this->getCountryContinent($city['country_code']);
+        $countryName = $this->getCountryName($city['country_code'] ?? '');
+        $continent = $this->getCountryContinent($city['country_code'] ?? '');
 
         return [
-            'iata_code' => $city['code'],
-            'city_code' => $city['code'],
-            'name' => $city['name'],
-            'city' => $city['name'],
+            'iata_code' => $city['code'] ?? null,
+            'city_code' => $city['code'] ?? null,
+            'name' => $city['name'] ?? '',
+            'city' => $city['name'] ?? '', // Используем name вместо city, так как у городов нет поля city
             'country' => $countryName,
-            'country_code' => $city['country_code'],
+            'country_code' => $city['country_code'] ?? '',
             'continent_name' => $continent,
             'coordinates' => [
                 'lat' => $city['coordinates']['lat'] ?? null,
@@ -343,16 +366,16 @@ class TravelpayoutsService
      */
     protected function enrichAirportData($airport)
     {
-        $countryName = $this->getCountryName($airport['country_code']);
-        $continent = $this->getCountryContinent($airport['country_code']);
+        $countryName = $this->getCountryName($airport['country_code'] ?? '');
+        $continent = $this->getCountryContinent($airport['country_code'] ?? '');
 
         return [
-            'iata_code' => $airport['code'],
-            'city_code' => $airport['city_code'] ?? $airport['code'],
-            'name' => $airport['name'],
-            'city' => $airport['city'],
+            'iata_code' => $airport['code'] ?? null,
+            'city_code' => $airport['city_code'] ?? $airport['code'] ?? null,
+            'name' => $airport['name'] ?? '',
+            'city' => $airport['city'] ?? $airport['name'] ?? '', // Проверяем наличие поля city
             'country' => $countryName,
-            'country_code' => $airport['country_code'],
+            'country_code' => $airport['country_code'] ?? '',
             'continent_name' => $continent,
             'coordinates' => [
                 'lat' => $airport['coordinates']['lat'] ?? $airport['lat'] ?? null,
@@ -587,10 +610,18 @@ class TravelpayoutsService
             ]);
 
             $results = json_decode($response->getBody(), true);
-            
+
+            if (!is_array($results)) {
+                return [];
+            }
+
             // Обогащаем данные информацией о стране и континенте
             $enrichedResults = [];
             foreach ($results as $result) {
+                if (!is_array($result)) {
+                    continue;
+                }
+
                 $countryCode = $result['country_code'] ?? null;
                 $countryName = $countryCode ? $this->getCountryName($countryCode) : 'Unknown';
                 $continent = $countryCode ? $this->getCountryContinent($countryCode) : 'Unknown';
@@ -619,12 +650,16 @@ class TravelpayoutsService
      */
     public function findByIataCode($iataCode)
     {
+        if (empty($iataCode)) {
+            return null;
+        }
+
         $iataCode = strtoupper($iataCode);
 
         // Ищем в городах
         $cities = $this->getAllCities();
         foreach ($cities as $city) {
-            if ($city['code'] === $iataCode) {
+            if (isset($city['code']) && $city['code'] === $iataCode) {
                 return $this->enrichCityData($city);
             }
         }
@@ -632,7 +667,7 @@ class TravelpayoutsService
         // Ищем в аэропортах
         $airports = $this->getAllAirports();
         foreach ($airports as $airport) {
-            if ($airport['code'] === $iataCode) {
+            if (isset($airport['code']) && $airport['code'] === $iataCode) {
                 return $this->enrichAirportData($airport);
             }
         }
@@ -694,24 +729,63 @@ class TravelpayoutsService
     protected function makeRequest($endpoint, $params = [])
     {
         try {
+            // Фильтруем null значения
             $params = array_filter($params, function ($value) {
                 return $value !== null;
             });
+            
+            $params['token'] = $this->token;
+
+            // Логируем для отладки
+            Log::info('Travelpayouts API Request', [
+                'endpoint' => $endpoint,
+                'params' => $params,
+                'token' => substr($this->token, 0, 5) . '...' // Показываем только начало токена
+            ]);
+
+            // Проверяем наличие токена
+            if (empty($this->token)) {
+                throw new \Exception('API token is not configured');
+            }
 
             $response = $this->client->get($this->baseUrl . $endpoint, [
                 'headers' => [
-                    'X-Access-Token' => $this->token
+                    'X-Access-Token' => $this->token,
+                    'Accept' => 'application/json',
                 ],
                 'query' => $params
             ]);
 
             $data = json_decode($response->getBody(), true);
 
+            // Логируем успешный ответ
+            Log::info('Travelpayouts API Response', [
+                'endpoint' => $endpoint,
+                'has_data' => isset($data['data']) || !empty($data)
+            ]);
+
             if (isset($data['success']) && $data['success'] === false) {
                 throw new \Exception($data['error'] ?? 'API request failed');
             }
 
             return $data['data'] ?? $data;
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $statusCode = $e->getResponse()->getStatusCode();
+            $body = $e->getResponse()->getBody()->getContents();
+
+            Log::error('Travelpayouts API Client Error', [
+                'endpoint' => $endpoint,
+                'status' => $statusCode,
+                'response' => $body,
+                'token_exists' => !empty($this->token)
+            ]);
+
+            // Специальная обработка для 401
+            if ($statusCode === 401) {
+                throw new \Exception('API authentication failed. Please check your token.');
+            }
+
+            return null;
         } catch (\Exception $e) {
             Log::error('Travelpayouts API error: ' . $e->getMessage());
             return null;

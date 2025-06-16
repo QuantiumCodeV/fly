@@ -108,22 +108,11 @@ class AirportController extends Controller
             'to' => 'required|string|size:3',
         ]);
 
-        $from = $request->input('from');
-        $to = $request->input('to');
+        $from = strtoupper($request->input('from'));
+        $to = strtoupper($request->input('to'));
 
-        $airports = $this->travelpayouts->getAllAirports();
-
-        $fromAirport = null;
-        $toAirport = null;
-
-        foreach ($airports as $airport) {
-            if ($airport['code'] === $from) {
-                $fromAirport = $airport;
-            }
-            if ($airport['code'] === $to) {
-                $toAirport = $airport;
-            }
-        }
+        $fromAirport = $this->travelpayouts->findByIataCode($from);
+        $toAirport = $this->travelpayouts->findByIataCode($to);
 
         return response()->json([
             'from' => $fromAirport,

@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\TelegramService;
+use Illuminate\Support\Str;
 
 class RequestController extends Controller
 {
     public function create(Request $request)
     {
         $request->validate([
-            'active_type' => 'required|string',
+            'active_type' => 'nullable|string',
             'trip_type' => 'required|string',
             'cabin_class' => 'required|string',
             'passengers' => 'required|array',
@@ -35,8 +36,14 @@ class RequestController extends Controller
         $message = "
 *🛫 НОВАЯ ЗАЯВКА НА ПОИСК АВИАБИЛЕТОВ* 🛬
 
-*📋 Основная информация:*
-• *Тип активности:* `" . $requestData['active_type'] . "`
+*📋 Основная информация:*";
+
+        if (isset($requestData['active_type'])) {
+            $message .= "
+• *Тип активности:* `" . $requestData['active_type'] . "`";
+        }
+
+        $message .= "
 • *Тип поездки:* `" . $requestData['trip_type'] . "`
 • *Класс обслуживания:* `" . $requestData['cabin_class'] . "`
 
@@ -69,7 +76,13 @@ class RequestController extends Controller
         $telegramService = new TelegramService();
         $telegramService->sendMessage(env('TELEGRAM_CHAT_ID'), $message);
 
-        return response()->json(['message' => 'Request created successfully']);
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'id' => Str::random(24),
+                'event' => 'non_us_lead_created'
+            ]
+        ]);
     }
 
     public function redirects(Request $request)
@@ -83,6 +96,27 @@ class RequestController extends Controller
                     'pageCount' => 0,
                     'total' => 0
                 ]
+            ]
+        ]);
+    }
+
+    public function pageResults(Request $request, $page) {
+        return response()->json([
+            'data' => [
+                'id' => 1,
+                'attributes' => [
+                    'title' => 'Luxury Airways | Results',
+                    'metaDescription' => 'Luxury Airways is an online travel agency that offers massively discounted airfares to flights across the world, Get online or call us now for a quote!',
+                    'header' => null,
+                    'subheader' => null,
+                    'slug' => '/results',
+                    'createdAt' => '2024-06-21T17:17:29.908Z',
+                    'updatedAt' => '2024-11-13T13:08:25.275Z',
+                    'publishedAt' => '2024-06-21T17:17:30.764Z',
+                    'blocks' => []
+                ]
+            ],
+            'meta' => [
             ]
         ]);
     }
