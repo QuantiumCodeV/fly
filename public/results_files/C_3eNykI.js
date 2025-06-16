@@ -25015,7 +25015,7 @@ const hA = K({
                             ref_key: "instance",
                             ref: t,
                             "aria-label": "LIVE CHAT",
-                            class: "fixed bottom-5 right-5 flex items-center justify-center gap-1.5 max-sm:size-[60px] sm:px-8 py-4 text-sm font-bold text-white rounded-full bg-[#36913F] z-[100]",
+                            class: "fixed hidden bottom-5 right-5 flex items-center justify-center gap-1.5 max-sm:size-[60px] sm:px-8 py-4 text-sm font-bold text-white rounded-full bg-[#36913F] z-[100]",
                             onClick: n,
                         },
                         [
