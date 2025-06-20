@@ -1956,7 +1956,7 @@
         .bg-blue-100 {
             --tw-bg-opacity: 1;
             background-color: #dbeafe;
-            background-color: rgb(219 234 254 / var(--tw-bg-opacity));
+            background-color: #d2c8b5;
         }
 
         .bg-brand {
@@ -9485,7 +9485,7 @@
         .bg-blue-100 {
             --tw-bg-opacity: 1;
             background-color: #dbeafe;
-            background-color: rgb(219 234 254 / var(--tw-bg-opacity));
+            background-color: #d2c8b5;
         }
 
         .bg-brand {
