@@ -13439,7 +13439,7 @@
                 class="w-full pl-[calc(100vw-100%)] transition-colors duration-500 show-header absolute h-20 md:h-32 z-50 text-white">
                 <div
                     class="container flex items-center justify-between h-full">
-                    <a href="https://fly.business/" class="">
+                    <a href="/" class="">
                     <img src="/logo.png" style="width: 100%;max-width:160px" alt=""></a>
                     <div class="max-lg:hidden flex items-center gap-4">
                         <div class="text-xs">ACCREDITED MEMBER</div>
@@ -14452,7 +14452,7 @@
             <div
                 class="flex items-center gap-3 pl-2.5 sm:border-l border-white max-sm:text-sm">
                 <a
-                    href="https://fly.business/privacy-policy"
+                    href="/privacy-policy"
                     rel="noopener noreferrer"
                     target="_blank"
                     class="group relative isolate w-fit">
@@ -14460,7 +14460,7 @@
                     <span
                         aria-hidden="true"
                         class="absolute top-full left-0 w-full h-px bg-current scale-x-100 group-hover:scale-x-0 transition origin-left"></span></a><a
-                    href="https://fly.business/terms"
+                    href="/terms"
                     rel="noopener noreferrer"
                     target="_blank"
                     class="group relative isolate w-fit">

@@ -4995,7 +4995,7 @@ if(t && t.class && typeof t.class === 'string' && t.class.includes('pointer-even
 if(t && (t.to == "/terms" || t.to == "/privacy-policy")){
     console.log("тут тоже")
 }
-if (t && t.class && typeof t.class === 'string' && t.class.includes('pointer-events-none') && (t.to == "/terms" || t.to == "/privacy-policy")) {
+if (t && t.class && typeof t.class === 'string' && t.class.includes('pointer-events-none') && (t.to == "/terms" || t.to == "/privacy-policy" || t.to == "/accreditations")) {
     console.log("тут тоже 1")
     t.class = t.class.replace('pointer-events-none', '')
 }

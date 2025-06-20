@@ -30,3 +30,7 @@ Route::get('/terms', function () {
 Route::get('/privacy-policy', function () {
     return view('privacy-policy');
 });
+
+Route::get('/accreditations', function () {
+    return view('accreditations');
+});

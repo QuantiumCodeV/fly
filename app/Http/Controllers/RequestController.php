@@ -120,4 +120,37 @@ class RequestController extends Controller
             ]
         ]);
     }
+
+    public function contacts(Request $request)
+{
+    $requestData = $request->all();
+
+    $message = "
+📩 *НОВОЕ СООБЩЕНИЕ С КОНТАКТНОЙ ФОРМЫ*
+
+• *Имя:* `" . ($requestData['name'] ?? 'не указано') . "`
+• *Email:* `" . ($requestData['email'] ?? 'не указано') . "`
+• *Телефон:* `" . ($requestData['phone'] ?? 'не указано') . "`
+• *Сообщение:* `" . ($requestData['message'] ?? 'не указано') . "`";
+
+    // Доп. данные (необязательно, можно убрать если не нужно)
+    if (isset($requestData['_cp'])) {
+        $message .= "\n• *Источник:* `" . $requestData['_cp'] . "`";
+    }
+    if (isset($requestData['_gacid'])) {
+        $message .= "\n• *GA Client ID:* `" . $requestData['_gacid'] . "`";
+    }
+    if (isset($requestData['_roistat'])) {
+        $message .= "\n• *Roistat:* `" . $requestData['_roistat'] . "`";
+    }
+
+    $telegramService = new TelegramService();
+    $telegramService->sendMessage(env('TELEGRAM_CHAT_ID'), $message);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Контактные данные успешно отправлены.'
+    ]);
+}
+
 }
