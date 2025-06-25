@@ -468,7 +468,7 @@ const J = { class: "grid gap-1.5 p-5 bg-white rounded-xl shadow" },
                                         [
                                             t(
                                                 "span",
-                                                { class: "text-brand" },
+                                                { class: "text-black" },
                                                 "COULDN'T FIND"
                                             ),
                                             x(" WHAT YOU WERE LOOKING FOR? "),

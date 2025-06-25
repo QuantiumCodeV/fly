@@ -49983,7 +49983,7 @@ const wk = On(bk, [["render", Ck]]),
     Wk = {
         target: "_blank",
         href: "https://www.ccra.com/check-true-code/",
-        class: "flex gap-2 hover:text-gray-500",
+        class: "flex gap-2 hover:text-gray-500 text-black",
     },
     Gk = { class: "flex flex-col text-xs" },
     Kk = {
