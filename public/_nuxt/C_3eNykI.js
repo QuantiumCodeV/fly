@@ -49829,9 +49829,7 @@ const FL = { class: "container flex items-center justify-between h-full" },
         viewBox: "0 0 33 40",
     };
 function ik(e, t) {
-    return (
-        H(),
-    );
+    return true;
 }
 const sk = On(ok, [["render", ik]]),
     lk = {},
