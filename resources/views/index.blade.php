@@ -94,10 +94,10 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","image":"https://fly.business/images/og-image.png","url":"https://fly.business","logo":"https://fly.business/images/logo.png","name":"Luxury Airways","description":"Specializing in Discounted Business Class Tickets, we ensure your comfort with smart financial choices. For Cheap Business Class Flights, we've got you covered.","contactPoint":{"@type":"ContactPoint","telephone":"+1 (315) 260-2111","email":"cs@fly.business","contactType":"Customer Service","areaServed":"Global","availableLanguage":"English"}}</script>
 <script type="text/javascript" defer>(function(w,d,s,h,id){w.roistatProjectId=id;w.roistatHost=h;var p=d.location.protocol=="https:"?"https://":"http://";var u=/^.*roistat_visit=[^;]+(.*)?$/.test(d.cookie)?"/dist/module.js":"/api/site/1.0/"+id+"/init?referrer="+encodeURIComponent(d.location.href);var js=d.createElement(s);js.charset="UTF-8";js.async=1;js.src=p+h+u;var js2=d.getElementsByTagName(s)[0];js2.parentNode.insertBefore(js,js2);})(window,document,'script','cloud.roistat.com','6873a6b281e6ee48aa61d6a8a4ba3fe0')</script>
 <meta property="og:url" content="https://fly.business/">
-<meta property="og:image" content="https://fly.business/images/og-image.png">
+<meta property="og:image" content="/logo.png">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://fly.business/images/og-image.png">
+<meta name="twitter:image" content="/logo.png">
 <link rel="canonical" href="/">
 <meta property="og:title" content="Luxury Airways | Home">
 <meta name="twitter:title" content="Luxury Airways | Home">
