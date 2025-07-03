@@ -30,3 +30,4 @@ Route::get('/redirects', [RequestController::class, 'redirects']);
 Route::get('/airports/pair', [AirportController::class, 'pair']);
 Route::get('/content/page/{page}', [RequestController::class, 'pageResults']);
 Route::post('/contacts/submit', [RequestController::class, 'contacts']);
+Route::get('/content/page', [RequestController::class, 'pageResultsMain']);

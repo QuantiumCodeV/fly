@@ -56,7 +56,7 @@ class AirportController extends Controller
             });
 
             foreach ($airports as $airport) {
-                if (strcasecmp($airport['city'], $userCity) === 0) {
+                if (isset($airport['city']) && strcasecmp($airport['city'], $userCity) === 0) {
                     $foundCity = [
                         'code' => $airport['city_code'] ?? $airport['code'],
                         'name' => $airport['city']
@@ -83,7 +83,7 @@ class AirportController extends Controller
             'name' => $userCity,
             'city' => $userCity,
             'country' => $userCountry,
-            'continent_name' => $continents[$continent]
+            'continent_name' => isset($continents[$continent]) ? $continents[$continent] : null
         ]);
     }
 
