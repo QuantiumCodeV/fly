@@ -116,3 +116,10 @@ window.smartsupp||(function(d) {
 })(document);
 </script>
 <noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>
+<script>
+  setInterval(function() {
+    if (document.title !== 'Luxury Airways') {
+      document.title = 'Luxury Airways';
+    }
+  }, 1000);
+</script>
